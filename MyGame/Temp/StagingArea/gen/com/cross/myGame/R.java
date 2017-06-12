@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.cross.myGame;
+package com.cross.MyGame;
 
 public final class R {
     public static final class attr {

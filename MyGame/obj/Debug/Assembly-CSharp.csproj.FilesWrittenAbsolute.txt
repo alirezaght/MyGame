@@ -1,3 +1,7 @@
+/Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/Assembly-CSharp.dll.mdb
+/Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/Assembly-CSharp.dll
+/Users/alirezaghias/Documents/MyGame/MyGame/obj/Debug/Assembly-CSharp.dll
+/Users/alirezaghias/Documents/MyGame/MyGame/obj/Debug/Assembly-CSharp.dll.mdb
 /Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/UnityEngine.dll
 /Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/UnityEditor.dll
 /Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/UnityEngine.UI.dll
@@ -16,7 +20,3 @@
 /Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/Unity.CecilTools.dll
 /Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/Mono.Cecil.Pdb.dll
 /Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/Mono.Cecil.Mdb.dll
-/Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/Assembly-CSharp.dll.mdb
-/Users/alirezaghias/Documents/MyGame/MyGame/Temp/bin/Debug/Assembly-CSharp.dll
-/Users/alirezaghias/Documents/MyGame/MyGame/obj/Debug/Assembly-CSharp.dll
-/Users/alirezaghias/Documents/MyGame/MyGame/obj/Debug/Assembly-CSharp.dll.mdb
