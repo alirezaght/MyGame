@@ -8,11 +8,10 @@ using System.Runtime.InteropServices;
 
 public class SwipManager : MonoBehaviour
 {
-	public GameObject DummyPrefab;
-	private GameObject activeDummy;
 
-	public float ForceMultiplier = 10.0f;
-	public float MaxForce = 3000f;
+	public float ForceMultiplier;
+	public float MaxForce;
+	public float MinForce;
 	public Text debugText;
 	public GameObject[] players;
 	int playerMask;
@@ -22,11 +21,14 @@ public class SwipManager : MonoBehaviour
 	Vector2 startSwipePosition = Vector2.zero;
 	bool isSwiping = false;
 
+	double screenGhotr  = 1;
+
 	void Awake ()
 	{					
 //		LeanTouch.OnFingerSwipe += OnFingerSwipe;
 		playerMask = ~(1 << LayerMask.NameToLayer("Player"));
 		wallMask = ~(1 << LayerMask.NameToLayer("Wall"));
+		screenGhotr = Math.Sqrt (Math.Pow (Screen.width, 2) + Math.Pow (Screen.height, 2));
 	}
 	// Use this for initialization
 	void Start ()
@@ -43,13 +45,8 @@ public class SwipManager : MonoBehaviour
 		}
 
 		Touch touch = Input.GetTouch (0);
-	
-		Log (touch.position.ToString ());
+		
 		if (touch.phase == TouchPhase.Began) {
-			activeDummy = GameObject.Instantiate (DummyPrefab);
-			activeDummy.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x,touch.position.y,0));
-
-			return;
 			swipeTime = 0;
 			startSwipePosition = touch.position;
 			isSwiping = true;
@@ -62,36 +59,25 @@ public class SwipManager : MonoBehaviour
 			}
 			return;
 		}
-		if (touch.phase == TouchPhase.Moved && activeDummy != null) {
-			activeDummy.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x,touch.position.y,0));
-			return;
-		}
-		if (touch.phase == TouchPhase.Ended && activeDummy != null) {
-			Destroy (activeDummy);
-			activeDummy = null;
-		}
-
-		return;
 		if (touch.phase == TouchPhase.Moved && isSwiping) {
 			swipeTime += Time.deltaTime;
 
-			if (this.beganHitRigidBody != null) {
-				Vector2 distance = touch.position - startSwipePosition;
-				float a = distance.magnitude * 5 / (float)(Math.Pow (swipeTime, 2));
+			Vector2 distance = touch.position - startSwipePosition;
 
-				MoveWithVector (this.beganHitRigidBody, distance.normalized * a, Vector3.zero);
-				isSwiping = false;
+			double a = distance.magnitude / screenGhotr + swipeTime;
+			//float a = distance.magnitude / swipeTime;
+		
+
+			if (this.beganHitRigidBody != null) {				
+				MoveWithVector (this.beganHitRigidBody, touch.deltaPosition.normalized * a * 2, Vector3.zero);
 			} else {
 				Ray ray = Camera.main.ScreenPointToRay (touch.position);
 				RaycastHit hit;
 				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, wallMask)) {
-					Vector2 distance = touch.position - startSwipePosition;
-					float a = distance.magnitude * 5 / (float)(Math.Pow (swipeTime, 2));
-					 
-					MoveWithVector (hit.rigidbody, distance.normalized * a, Camera.main.WorldToScreenPoint(hit.point));
-					isSwiping = false;
+					MoveWithVector (hit.rigidbody, touch.deltaPosition.normalized * a, hit.point);
 				}
 			}
+			isSwiping = false;
 			
 		}
 		if (touch.phase == TouchPhase.Ended) {
@@ -158,7 +144,10 @@ public class SwipManager : MonoBehaviour
 		if (force > MaxForce) {
 			force = MaxForce;
 		}
+		if (force < MinForce)
+			force = MinForce;
 		direction = direction.normalized * force;	
+		Log ("f = " + force);
 		if (hitPoint == Vector3.zero) {
 			rigidBody.AddForce (direction);
 		} else {
