@@ -63,7 +63,7 @@ public class SwipManager : MonoBehaviour
 			swipeTime += Time.deltaTime;
 			Vector3 position = touch.position;
 			Vector3 distance = position - startSwipePosition;
-			Vector3 delta = touch.deltaPosition;
+			Vector3 delta = new Vector3(touch.deltaPosition.x, 0, touch.deltaPosition.y);
 			float a = (distance.magnitude / screenGhotr) / swipeTime;
 			//float a = distance.magnitude / swipeTime;
 		
