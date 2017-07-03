@@ -13,7 +13,6 @@ public class SwipManager : MonoBehaviour
 	public float MaxForce;
 	public float MinForce;
 	public Text debugText;
-	public GameObject[] players;
 	int ignorePlayerMask;
 	int ignoreWallMask;
 
@@ -21,11 +20,12 @@ public class SwipManager : MonoBehaviour
 	Vector3 startSwipePosition = Vector2.zero;
 	bool isSwiping = false;
 
-	float screenGhotr  = 1;
+	float screenGhotr  = 1f;
 
 	void Awake ()
 	{					
 //		LeanTouch.OnFingerSwipe += OnFingerSwipe;
+		Physics.gravity = new Vector3(0, -200, 0);
 		ignorePlayerMask = ~(1 << LayerMask.NameToLayer("Player"));
 		ignoreWallMask = ~(1 << LayerMask.NameToLayer("Wall"));
 		screenGhotr = (float)Math.Sqrt (Math.Pow (Screen.width, 2) + Math.Pow (Screen.height, 2));
@@ -67,7 +67,7 @@ public class SwipManager : MonoBehaviour
 	}
 	void HandleTouch(Touch touch) {
 		if (touch.phase == TouchPhase.Began) {
-			swipeTime = 0;
+			swipeTime = 0f;
 			startSwipePosition = touch.position;
 			isSwiping = true;
 
@@ -84,12 +84,12 @@ public class SwipManager : MonoBehaviour
 			Vector3 position = touch.position;
 			Vector3 distance = position - startSwipePosition;
 			Vector3 delta = new Vector3(touch.deltaPosition.x, 0, touch.deltaPosition.y);
-			float a = (distance.magnitude / screenGhotr) / swipeTime;
+			float a = 2f * touch.deltaPosition.magnitude / (float)Math.Pow(touch.deltaTime, 2);
 			//float a = distance.magnitude / swipeTime;
 
 
 			if (this.beganHitRigidBody != null) {				
-				MoveWithVector (this.beganHitRigidBody, delta.normalized * a * 2, Vector3.zero);
+				MoveWithVector (this.beganHitRigidBody, delta.normalized * a * 1.2f, Vector3.zero);
 				isSwiping = false;
 			} else {
 				Log (touch.position.ToString());
@@ -100,6 +100,8 @@ public class SwipManager : MonoBehaviour
 				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
 					MoveWithVector (hit.rigidbody, delta.normalized * a, hit.point);
 					isSwiping = false;
+				} else {
+//					Camera.main.transform.rotation = Quaternion.Euler (Camera.main.transform.eulerAngles.x, ((startSwipePosition.x - touch.position.x) * 180 / Screen.width), Camera.main.transform.eulerAngles.z);
 				}
 			}			
 		}
@@ -109,10 +111,7 @@ public class SwipManager : MonoBehaviour
 			return;
 		}
 	}
-	void Log(String msg) {
-		for (int i = 0; i < players.Length; i++) {			
-			msg += " player" + i + "=" + players[i].transform.position;
-		}
+	void Log(String msg) {		
 		Debug.Log (msg);
 		if (debugText != null) 
 			debugText.text = msg;
