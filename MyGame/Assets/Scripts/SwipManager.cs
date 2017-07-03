@@ -14,21 +14,21 @@ public class SwipManager : MonoBehaviour
 	public float MinForce;
 	public Text debugText;
 	public GameObject[] players;
-	int playerMask;
-	int wallMask;
+	int ignorePlayerMask;
+	int ignoreWallMask;
 
 	float swipeTime = 0;
-	Vector2 startSwipePosition = Vector2.zero;
+	Vector3 startSwipePosition = Vector2.zero;
 	bool isSwiping = false;
 
-	double screenGhotr  = 1;
+	float screenGhotr  = 1;
 
 	void Awake ()
 	{					
 //		LeanTouch.OnFingerSwipe += OnFingerSwipe;
-		playerMask = ~(1 << LayerMask.NameToLayer("Player"));
-		wallMask = ~(1 << LayerMask.NameToLayer("Wall"));
-		screenGhotr = Math.Sqrt (Math.Pow (Screen.width, 2) + Math.Pow (Screen.height, 2));
+		ignorePlayerMask = ~(1 << LayerMask.NameToLayer("Player"));
+		ignoreWallMask = ~(1 << LayerMask.NameToLayer("Wall"));
+		screenGhotr = (float)Math.Sqrt (Math.Pow (Screen.width, 2) + Math.Pow (Screen.height, 2));
 	}
 	// Use this for initialization
 	void Start ()
@@ -52,29 +52,29 @@ public class SwipManager : MonoBehaviour
 			isSwiping = true;
 
 			this.beganHitRigidBody = null;
-			Ray ray = Camera.main.ScreenPointToRay (touch.position);
+			Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
 			RaycastHit hit;
-			if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, wallMask)) {
+			if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
 				this.beganHitRigidBody = hit.rigidbody;
 			}
 			return;
 		}
 		if (touch.phase == TouchPhase.Moved && isSwiping) {
 			swipeTime += Time.deltaTime;
-
-			Vector2 distance = touch.position - startSwipePosition;
-
-			double a = distance.magnitude / screenGhotr + swipeTime;
+			Vector3 position = touch.position;
+			Vector3 distance = position - startSwipePosition;
+			Vector3 delta = touch.deltaPosition;
+			float a = (distance.magnitude / screenGhotr) / swipeTime;
 			//float a = distance.magnitude / swipeTime;
 		
 
 			if (this.beganHitRigidBody != null) {				
-				MoveWithVector (this.beganHitRigidBody, touch.deltaPosition.normalized * a * 2, Vector3.zero);
+				MoveWithVector (this.beganHitRigidBody, delta.normalized * a * 2, Vector3.zero);
 			} else {
-				Ray ray = Camera.main.ScreenPointToRay (touch.position);
+				Ray ray = Camera.main.ScreenPointToRay (position);
 				RaycastHit hit;
-				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, wallMask)) {
-					MoveWithVector (hit.rigidbody, touch.deltaPosition.normalized * a, hit.point);
+				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
+					MoveWithVector (hit.rigidbody, delta.normalized * a, hit.point);
 				}
 			}
 			isSwiping = false;
@@ -138,7 +138,7 @@ public class SwipManager : MonoBehaviour
 //	}
 
 
-	void MoveWithVector (Rigidbody rigidBody, Vector2 direction, Vector3 hitPoint)
+	void MoveWithVector (Rigidbody rigidBody, Vector3 direction, Vector3 hitPoint)
 	{						
 		var force = direction.magnitude * ForceMultiplier;
 		if (force > MaxForce) {
@@ -147,7 +147,7 @@ public class SwipManager : MonoBehaviour
 		if (force < MinForce)
 			force = MinForce;
 		direction = direction.normalized * force;	
-		Log ("f = " + force);
+		Log ("f = " + force + ", d = " + direction);
 		if (hitPoint == Vector3.zero) {
 			rigidBody.AddForce (direction);
 		} else {
