@@ -38,14 +38,34 @@ public class SwipManager : MonoBehaviour
 
 	Rigidbody beganHitRigidBody = null;
 	// Update is called once per frame
+	Vector3 lastMousePosition = Vector3.zero;
 	void Update ()
 	{
+		if (Input.GetMouseButton(0) ) {
+			Touch fakeTouch = new Touch();
+			fakeTouch.fingerId = 10;
+			fakeTouch.position = Input.mousePosition;
+			fakeTouch.deltaTime = Time.deltaTime;
+			if (lastMousePosition == Vector3.zero)
+				lastMousePosition = Input.mousePosition;
+			fakeTouch.deltaPosition = Input.mousePosition - lastMousePosition;
+			lastMousePosition = Input.mousePosition;
+			fakeTouch.phase =    (Input.GetMouseButtonDown(0) ? TouchPhase.Began : 
+				(fakeTouch.deltaPosition.sqrMagnitude > 1f ? TouchPhase.Moved : TouchPhase.Stationary) );
+			fakeTouch.tapCount = 1;
+
+			HandleTouch(fakeTouch);
+		}
+
 		if (Input.touchCount <= 0) {
 			return;
 		}
 
 		Touch touch = Input.GetTouch (0);
+		HandleTouch (touch);
 
+	}
+	void HandleTouch(Touch touch) {
 		if (touch.phase == TouchPhase.Began) {
 			swipeTime = 0;
 			startSwipePosition = touch.position;
@@ -66,7 +86,7 @@ public class SwipManager : MonoBehaviour
 			Vector3 delta = new Vector3(touch.deltaPosition.x, 0, touch.deltaPosition.y);
 			float a = (distance.magnitude / screenGhotr) / swipeTime;
 			//float a = distance.magnitude / swipeTime;
-		
+
 
 			if (this.beganHitRigidBody != null) {				
 				MoveWithVector (this.beganHitRigidBody, delta.normalized * a * 2, Vector3.zero);
@@ -75,7 +95,7 @@ public class SwipManager : MonoBehaviour
 				Log (touch.position.ToString());
 				Ray ray = Camera.main.ScreenPointToRay (position);
 				Log (ray.ToString ());
-					
+
 				RaycastHit hit;
 				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
 					MoveWithVector (hit.rigidbody, delta.normalized * a, hit.point);
@@ -89,7 +109,6 @@ public class SwipManager : MonoBehaviour
 			return;
 		}
 	}
-
 	void Log(String msg) {
 		for (int i = 0; i < players.Length; i++) {			
 			msg += " player" + i + "=" + players[i].transform.position;
