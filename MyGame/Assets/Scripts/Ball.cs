@@ -20,9 +20,10 @@ public class Ball : MonoBehaviour
 		if (rigidBody == null)
 			return;
 		if (IsMoving) {
-			if (rigidBody.velocity.magnitude <= 0.2f) {
+			Vector3 velocity = new Vector3 (rigidBody.velocity.x, 0, rigidBody.velocity.z);
+			if (velocity.magnitude <= 0.2f) {
 				this.IsMoving = false;
-				//SwipManager.Current.Log ("ball stopped.");
+				SwipManager.Current.Log ("ball stopped.");
 				//SwipManager.Current.Log (rigidBody.velocity.magnitude.ToString ());
 				return;
 			}
