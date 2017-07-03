@@ -2,18 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="220e43ee-8b4e-4e0e-bf89-baaac1e9c91f" name="Default" comment="Merge branch 'master' of https://github.com/alirezaght/MyGame&#10;&#10;# Conflicts:&#10;#&#9;MyGame/Library/assetDatabase3&#10;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MyGame/Assets/Environment/Materials/DefaultMat.mat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/MyGame.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MyGame/Assets/Environment/Materials.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MyGame/Assets/Environment/Materials/DefaultMat.mat.meta" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/ScriptAssemblies/Assembly-CSharp.dll" afterPath="$PROJECT_DIR$/MyGame/Library/ScriptAssemblies/Assembly-CSharp.dll" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/ScriptAssemblies/Assembly-CSharp.dll.mdb" afterPath="$PROJECT_DIR$/MyGame/Library/ScriptAssemblies/Assembly-CSharp.dll.mdb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/metadata/5e/5ebc6abf0c94d42c980a12338100cc8c" afterPath="$PROJECT_DIR$/MyGame/Library/metadata/5e/5ebc6abf0c94d42c980a12338100cc8c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Assembly-CSharp.csproj" afterPath="$PROJECT_DIR$/MyGame/Assembly-CSharp.csproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/assetDatabase3" afterPath="$PROJECT_DIR$/MyGame/Library/assetDatabase3" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/CurrentLayout.dwlt" afterPath="$PROJECT_DIR$/MyGame/Library/CurrentLayout.dwlt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/ScriptAssemblies/BuiltinAssemblies.stamp" afterPath="$PROJECT_DIR$/MyGame/Library/ScriptAssemblies/BuiltinAssemblies.stamp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/shadercompiler-UnityShaderCompiler1.log" afterPath="$PROJECT_DIR$/MyGame/Library/shadercompiler-UnityShaderCompiler1.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/shadercompiler-UnityShaderCompiler2.log" afterPath="$PROJECT_DIR$/MyGame/Library/shadercompiler-UnityShaderCompiler2.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/Library/shadercompiler-UnityShaderCompiler3.log" afterPath="$PROJECT_DIR$/MyGame/Library/shadercompiler-UnityShaderCompiler3.log" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyGame/MyGame.userprefs" afterPath="$PROJECT_DIR$/MyGame/MyGame.userprefs" />
     </list>
     <ignored path="MyGame.iws" />
@@ -220,7 +215,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="233000" />
+    <option name="totallyTimeSpent" value="831000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="726" extended-state="6" />

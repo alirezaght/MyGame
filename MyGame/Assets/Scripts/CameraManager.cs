@@ -51,7 +51,7 @@ public class CameraManager : MonoBehaviour {
 	void Update () {
 		var center = CenterOfPlayers ();
 		var maxDistance = MaxDistanceOfPlayers ();
-		var cameraPos = new Vector3 (gameObject.transform.position.x, 0, gameObject.transform.position.z);
+		var cameraPos = new Vector3 (Camera.main.transform.position.x, 0, Camera.main.transform.position.z);
 		if ((cameraPos - center).magnitude > CenterThreshold)
 			MoveCamera(center);
 
@@ -67,7 +67,7 @@ public class CameraManager : MonoBehaviour {
 		Camera.main.orthographicSize = Mathf.Lerp (Camera.main.orthographicSize, newValue, 1 * Time.deltaTime);			
 	}
 	void MoveCamera(Vector3 position) {
-		var pos = new Vector3 (position.x, gameObject.transform.position.y, position.z);
-		gameObject.transform.position = Vector3.Lerp (gameObject.transform.position, pos, 1f * Time.deltaTime);
+		var pos = new Vector3 (position.x, Camera.main.transform.position.y, position.z);
+		Camera.main.transform.position = Vector3.Lerp (Camera.main.transform.position, pos, 1f * Time.deltaTime);
 	}
 }
