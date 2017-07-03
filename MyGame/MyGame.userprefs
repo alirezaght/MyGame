@@ -1,9 +1,5 @@
 ﻿<Properties StartupConfiguration="{F8672B8E-08CC-FDD0-2655-E4A0BDE13795}|" StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/SwipManager.cs">
-    <Files>
-      <File FileName="Assets/Scripts/SwipManager.cs" Line="43" Column="13" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
