@@ -22,6 +22,10 @@ public class SwipManager : MonoBehaviour
 
 	float screenGhotr  = 1f;
 
+	public static SwipManager Current;
+	public SwipManager(){
+		Current = this;
+	}
 	void Awake ()
 	{					
 //		LeanTouch.OnFingerSwipe += OnFingerSwipe;
@@ -92,9 +96,9 @@ public class SwipManager : MonoBehaviour
 				MoveWithVector (this.beganHitRigidBody, delta.normalized * a * 1.2f, Vector3.zero);
 				isSwiping = false;
 			} else {
-				Log (touch.position.ToString());
+				//Log (touch.position.ToString());
 				Ray ray = Camera.main.ScreenPointToRay (position);
-				Log (ray.ToString ());
+				//Log (ray.ToString ());
 
 				RaycastHit hit;
 				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
@@ -111,8 +115,11 @@ public class SwipManager : MonoBehaviour
 			return;
 		}
 	}
-	void Log(String msg) {		
-		Debug.Log (msg);
+	public void Log(String msg) {
+		//for (int i = 0; i < players.Length; i++) {
+		//	msg += " player" + i + "=" + players[i].transform.position;
+		//}
+		//Debug.Log (msg);
 		if (debugText != null) 
 			debugText.text = msg;
 	}
@@ -169,12 +176,14 @@ public class SwipManager : MonoBehaviour
 		if (force < MinForce)
 			force = MinForce;
 		direction = direction.normalized * force;	
-		Log ("f = " + force + ", d = " + direction);
+		//Log ("f = " + force + ", d = " + direction);
 		if (hitPoint == Vector3.zero) {
 			rigidBody.AddForce (direction);
 		} else {
 			rigidBody.AddForceAtPosition (direction, hitPoint);
 		}
+
+		PlayerManager.Current.MoveBall (rigidBody.gameObject);
 
 	}
 
