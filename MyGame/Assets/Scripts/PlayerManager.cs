@@ -40,9 +40,13 @@ public class PlayerManager : MonoBehaviour
 			if (BallCrossed) {
 				this.movingBallGameObject = null;
 				this.movingBall = null;		
+				notMovingBalls.Clear();
 			} else {
 				//player lost
 				SwipManager.Current.Log("Player Lost...!");
+				this.movingBallGameObject = null;
+				this.movingBall = null;		
+				notMovingBalls.Clear();
 			}
 			return;
 		}
