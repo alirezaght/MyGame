@@ -45,7 +45,7 @@ public class SwipManager : MonoBehaviour
 		}
 
 		Touch touch = Input.GetTouch (0);
-		Log (touch.position.ToString());
+
 		if (touch.phase == TouchPhase.Began) {
 			swipeTime = 0;
 			startSwipePosition = touch.position;
@@ -70,18 +70,22 @@ public class SwipManager : MonoBehaviour
 
 			if (this.beganHitRigidBody != null) {				
 				MoveWithVector (this.beganHitRigidBody, delta.normalized * a * 2, Vector3.zero);
+				isSwiping = false;
 			} else {
+				Log (touch.position.ToString());
 				Ray ray = Camera.main.ScreenPointToRay (position);
+				Log (ray.ToString ());
+					
 				RaycastHit hit;
 				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
 					MoveWithVector (hit.rigidbody, delta.normalized * a, hit.point);
+					isSwiping = false;
 				}
-			}
-			isSwiping = false;
-			
+			}			
 		}
 		if (touch.phase == TouchPhase.Ended) {
 			isSwiping = false;
+			beganHitRigidBody = null;
 			return;
 		}
 	}
