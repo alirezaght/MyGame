@@ -45,7 +45,7 @@ public class SwipManager : MonoBehaviour
 		}
 
 		Touch touch = Input.GetTouch (0);
-		
+		Log (touch.position.ToString());
 		if (touch.phase == TouchPhase.Began) {
 			swipeTime = 0;
 			startSwipePosition = touch.position;
