@@ -38,10 +38,12 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	// Update is called once per frame
 	Vector3 lastMousePosition = Vector3.zero;
 	void Update ()
-	{
+	{		
 		if (Input.GetKeyUp (KeyCode.Escape)) {
 			Application.Quit ();
 		}
+		if (PlayerManager.Current.GameEnded)
+			return;
 		if (Input.GetMouseButton(0) ) {
 			Touch fakeTouch = new Touch();
 			fakeTouch.fingerId = 10;

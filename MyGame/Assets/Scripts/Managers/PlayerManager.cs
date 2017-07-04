@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : SingletonBehaviour<PlayerManager>
 {
+
+	public Animator LostAnimator;
+	public bool GameEnded = false;
+
 	List<Character> playerCharacters = new List<Character> ();
-
-
 	List<Rule> rules = new List<Rule> ();
 
 
@@ -43,9 +46,15 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 
 	void Lost ()
 	{
+		GameEnded = true;
+		LostAnimator.SetTrigger("Lost");
 		LogManager.Current.Log ("You Lost ");
 	}
 
+	public void TryAgain() {
+		GameEnded = false;
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+	}
 
 
 
