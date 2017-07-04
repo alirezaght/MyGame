@@ -2,37 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
-using System;
 using UnityEngine.UI;
-using System.Runtime.InteropServices;
+using System;
 
-public class SwipManager : MonoBehaviour
+
+public class SwipManager : SingletonBehaviour<SwipManager>
 {
-
 	public float ForceMultiplier;
 	public float MaxForce;
 	public float MinForce;
-	public Text debugText;
-	int ignorePlayerMask;
-	int ignoreWallMask;
 
+
+	int ignoreWallMask;
 	float swipeTime = 0;
 	Vector3 startSwipePosition = Vector2.zero;
 	bool isSwiping = false;
 
-	float screenGhotr  = 1f;
 
-	public static SwipManager Current;
-	public SwipManager(){
-		Current = this;
-	}
+
 	void Awake ()
 	{					
 //		LeanTouch.OnFingerSwipe += OnFingerSwipe;
 		Physics.gravity = new Vector3(0, -200, 0);
-		ignorePlayerMask = ~(1 << LayerMask.NameToLayer("Player"));
+
 		ignoreWallMask = ~(1 << LayerMask.NameToLayer("Wall"));
-		screenGhotr = (float)Math.Sqrt (Math.Pow (Screen.width, 2) + Math.Pow (Screen.height, 2));
+
 	}
 	// Use this for initialization
 	void Start ()
@@ -45,6 +39,9 @@ public class SwipManager : MonoBehaviour
 	Vector3 lastMousePosition = Vector3.zero;
 	void Update ()
 	{
+		if (Input.GetKeyUp (KeyCode.Escape)) {
+			Application.Quit ();
+		}
 		if (Input.GetMouseButton(0) ) {
 			Touch fakeTouch = new Touch();
 			fakeTouch.fingerId = 10;
@@ -86,7 +83,7 @@ public class SwipManager : MonoBehaviour
 		if (touch.phase == TouchPhase.Moved && isSwiping) {
 			swipeTime += Time.deltaTime;
 			Vector3 position = touch.position;
-			Vector3 distance = position - startSwipePosition;
+//			Vector3 distance = position - startSwipePosition;
 			Vector3 delta = new Vector3(touch.deltaPosition.x, 0, touch.deltaPosition.y);
 			float a = 2f * touch.deltaPosition.magnitude / (float)Math.Pow(touch.deltaTime, 2);
 			//float a = distance.magnitude / swipeTime;
@@ -115,57 +112,7 @@ public class SwipManager : MonoBehaviour
 			return;
 		}
 	}
-	public void Log(String msg) {
-		//for (int i = 0; i < players.Length; i++) {
-		//	msg += " player" + i + "=" + players[i].transform.position;
-		//}
-		//Debug.Log (msg);
-		if (debugText != null) 
-			debugText.text = msg;
-	}
-	long count = 0;
-//	void OnFingerSwipe (LeanFinger finger)
-//	{			
-//		Log ("Swipe " + count);
-//		var startPoint = finger.GetStartRay().origin;
-//		var endpoint = finger.GetRay().origin;
-//		var direction = (endpoint - startPoint);
-//		var hit = default(RaycastHit);
-//		if (Physics.Raycast (new Vector3 (startPoint.x, startPoint.y, -10f), new Vector3 (0f, 0f, 1f), out hit, float.PositiveInfinity, wallMask) == true) {
-//			Log ("Hit");
-//			var rigidbody = hit.rigidbody;
-//			var hitobject = hit.collider.gameObject;
-//			// Is the rigidbody attached to this GameObject?
-//			if (rigidbody != null) {
-//				foreach (GameObject player in players) {
-//					if (rigidbody.gameObject == player) {
-//						Log ("Move" + count);
-//						MoveWithVector (rigidbody, finger.SwipeScaledDelta);
-//					}
-//				}
-//				// Add force to the rigidbody based on the swipe force
-//			}
-//		} else {
-//			
-//			if (Physics.SphereCast (new Vector3 (startPoint.x, startPoint.y, 0f), 1f, new Vector3 (direction.normalized.x, direction.normalized.y, 0f), out hit, direction.magnitude, wallMask) == true) {
-//				Log ("Hit");
-//				var rigidbody = hit.rigidbody;
-//				var hitobject = hit.collider.gameObject;
-//				// Is the rigidbody attached to this GameObject?
-//				if (rigidbody != null) {
-//					foreach (GameObject player in players) {
-//						if (rigidbody.gameObject == player) {
-//							Log ("Move" + count);
-//							MoveWithVector (rigidbody, finger.SwipeScaledDelta);
-//						}
-//					}
-//					// Add force to the rigidbody based on the swipe force
-//				}
-//			}
-//		}
-//		count++;
-//	}
-
+		
 
 	void MoveWithVector (Rigidbody rigidBody, Vector3 direction, Vector3 hitPoint)
 	{						
@@ -182,9 +129,8 @@ public class SwipManager : MonoBehaviour
 		} else {
 			rigidBody.AddForceAtPosition (direction, hitPoint);
 		}
-
-		PlayerManager.Current.MoveBall (rigidBody.gameObject);
-
+		EventBus.Post ("PlayerMoved", new object[]{rigidBody.gameObject.GetComponent<Character>()});
+		EventBus.Trigger ("PlayerMoved");
 	}
 
 

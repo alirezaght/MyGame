@@ -46,11 +46,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\CollisionDetector.cs" />
-     <Compile Include="Assets\Scripts\Ball.cs" />
-     <Compile Include="Assets\Scripts\CameraManager.cs" />
-     <Compile Include="Assets\Scripts\PlayerManager.cs" />
-     <Compile Include="Assets\Scripts\SwipManager.cs" />
+     <Compile Include="Assets\Scripts\Character.cs" />
+     <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\SwipManager.cs" />
+     <Compile Include="Assets\Scripts\Rules\CrossingRule.cs" />
+     <Compile Include="Assets\Scripts\Rules\LostGroundRule.cs" />
+     <Compile Include="Assets\Scripts\Rules\Rule.cs" />
+     <Compile Include="Assets\Scripts\Utils\EventBus.cs" />
+     <Compile Include="Assets\Scripts\Utils\SingletonBehaviour.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

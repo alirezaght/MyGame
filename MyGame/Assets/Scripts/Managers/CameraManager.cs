@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using System;
 
-public class CameraManager : MonoBehaviour {
+public class CameraManager : SingletonBehaviour<CameraManager> {
 
 	public float CenterThreshold;
 	public float FieldViewThreshold;
@@ -14,23 +13,17 @@ public class CameraManager : MonoBehaviour {
 	public float MaxFieldView;
 
 
-	List<GameObject> players = new List<GameObject>();
+	List<Character> players = new List<Character>();
 
 
-	void Awake() {
-		var objects = FindObjectsOfType (typeof(GameObject));
-		var playerLayer = LayerMask.NameToLayer ("Player");
-		foreach (GameObject obj in objects) {
-			if (obj.layer == playerLayer) {
-				players.Add (obj);
-			}
-		}
+	void Start() {
+		players = PlayerManager.Current.GetPlayers ();
 	}
 
 	Vector3 CenterOfPlayers() {		
 		Vector3 average = Vector3.zero;
-		foreach (GameObject player in players) {
-			average += player.transform.position / 2;
+		foreach (Character player in players) {
+			average += player.gameObject.transform.position / 2;
 		}
 		return average;
 	}
@@ -67,7 +60,7 @@ public class CameraManager : MonoBehaviour {
 		Camera.main.orthographicSize = Mathf.Lerp (Camera.main.orthographicSize, newValue, 1 * Time.deltaTime);			
 	}
 	void MoveCamera(Vector3 position) {
-		var pos = new Vector3 (position.x, Camera.main.transform.position.y, position.z);
+		var pos = new Vector3 (position.x, Camera.main.transform.position.y, position.z - 12);
 		Camera.main.transform.position = Vector3.Lerp (Camera.main.transform.position, pos, 1f * Time.deltaTime);
 	}
 }
