@@ -32,6 +32,8 @@ public class EventBus {
 		if (triggers.ContainsKey (eventName)) {
 			triggers [eventName] -= 1; 
 			res = triggers [eventName] >= 0;
+			if (!res)
+				triggers.Remove (eventName);
 		}
 		return res;
 	}

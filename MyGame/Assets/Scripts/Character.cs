@@ -10,7 +10,7 @@ public class Character : MonoBehaviour
 		get {
 			Rigidbody rigidBody = GetRigidBody ();
 			Vector3 velocity = new Vector3 (rigidBody.velocity.x, 0, rigidBody.velocity.z);
-			if (EventBus.Consume ("PlayerMoved"))
+			if (EventBus.Consume ("PlayerMoved_" + id))
 				return true;
 			else return velocity.magnitude > 0.06f;
 		}

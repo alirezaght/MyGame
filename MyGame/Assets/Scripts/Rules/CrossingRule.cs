@@ -62,6 +62,7 @@ public class CrossingRule : Rule {
 
 		if (!this.movingBall.IsMoving) {	
 			EventBus.Post ("PlayerStopped", new object[]{ movingBall });
+			movingBall = null;
 			return BallCrossed;
 		} else {
 			return true;

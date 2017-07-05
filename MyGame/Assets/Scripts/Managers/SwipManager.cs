@@ -131,8 +131,9 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		} else {
 			rigidBody.AddForceAtPosition (direction, hitPoint);
 		}
-		EventBus.Post ("PlayerMoved", new object[]{rigidBody.gameObject.GetComponent<Character>()});
-		EventBus.Trigger ("PlayerMoved");
+		Character character = rigidBody.gameObject.GetComponent<Character> ();
+		EventBus.Post ("PlayerMoved", new object[]{character});
+		EventBus.Trigger ("PlayerMoved_" + character.id);
 	}
 
 
