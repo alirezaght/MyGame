@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrossingRule : Rule {
+public class CrossingRule : Rule
+{
 	
-	List<Character> playerCharacters = new List<Character>();
+	List<Character> playerCharacters = new List<Character> ();
 	Character movingBall = null;
-	List<Character> notMovingBalls = new List<Character>();
+	List<Character> notMovingBalls = new List<Character> ();
 	bool BallCrossed = false;
 
-	public CrossingRule() {				
+	public CrossingRule ()
+	{				
 		EventBus.Subscribe ("PlayerMoved", OnPlayerMoved);
 	}
 
-	void Start() {
+	void Start ()
+	{
 		playerCharacters = PlayerManager.Current.GetPlayers ();
 	}
 
@@ -30,8 +33,8 @@ public class CrossingRule : Rule {
 
 		this.notMovingBalls.Clear ();
 		for (int i = 0; i < playerCharacters.Count; i++) {
-			if (playerCharacters[i] != character) {
-				this.notMovingBalls.Add (playerCharacters[i]);
+			if (playerCharacters [i] != character) {
+				this.notMovingBalls.Add (playerCharacters [i]);
 			}
 		}
 
@@ -39,7 +42,8 @@ public class CrossingRule : Rule {
 
 	}
 
-	override public bool IsValid() {
+	override public bool IsValid ()
+	{
 		if (this.movingBall == null || this.notMovingBalls.Count != 2)
 			return true;
 
@@ -60,8 +64,7 @@ public class CrossingRule : Rule {
 			}
 		}
 
-		if (!this.movingBall.IsMoving) {	
-			EventBus.Post ("PlayerStopped", new object[]{ movingBall });
+		if (!this.movingBall.IsMoving) {				
 			movingBall = null;
 			return BallCrossed;
 		} else {

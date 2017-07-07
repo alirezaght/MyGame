@@ -46,8 +46,8 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 
 	void Lost ()
 	{
-		GameEnded = true;
-		LostAnimator.SetTrigger("Lost");
+//		GameEnded = true;
+//		LostAnimator.SetTrigger("Lost");
 		LogManager.Current.Log ("You Lost ");
 	}
 
