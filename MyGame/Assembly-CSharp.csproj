@@ -48,6 +48,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\BallCharacter.cs" />
      <Compile Include="Assets\Scripts\Character.cs" />
+     <Compile Include="Assets\Scripts\Force.cs" />
+     <Compile Include="Assets\Scripts\LimitedQueue.cs" />
      <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
      <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
      <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />

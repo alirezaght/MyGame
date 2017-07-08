@@ -22,7 +22,7 @@ public abstract class Character : MonoBehaviour
 
 	public abstract void DoMoveAnimation ();
 
-	public abstract bool MoveWithVector (float force, Queue<Vector3> path);
+	public abstract bool MoveWithVector (LimitedForceQueue path);
 
 	public void Awake ()
 	{

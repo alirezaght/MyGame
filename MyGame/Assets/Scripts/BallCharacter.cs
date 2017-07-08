@@ -7,7 +7,7 @@ using System;
 public class BallCharacter : Character
 {
 
-	Queue<Vector3> path = new Queue <Vector3> ();
+	LimitedForceQueue path = new LimitedForceQueue (10);
 	float force = 0f;
 	Renderer renderer;
 
@@ -42,16 +42,12 @@ public class BallCharacter : Character
 	bool Move ()
 	{
 		if (path.Count > 0) {
-			Vector3 direction = path.Dequeue ();
-			direction.y = 0;
-			if (path.Count > 0)
-				force /= path.Count;
+			Force force = path.Dequeue ();
 
-			direction = direction.normalized * force;	
 			//Log ("f = " + force + ", d = " + direction);
 			Rigidbody rigidBody = GetRigidBody ();
 
-			rigidBody.AddRelativeForce (direction, ForceMode.Force);
+			rigidBody.AddRelativeForce (force.NormalizeForce (path.SumOfForces), ForceMode.Force);
 
 			EventBus.Post ("PlayerMoved", new object[]{ this });
 			EventBus.Trigger ("PlayerMoved_" + this.id);
@@ -61,23 +57,16 @@ public class BallCharacter : Character
 		return false;
 	}
 
-	public override bool MoveWithVector (float force, Queue<Vector3> path)
-	{
-		force *= SwipManager.Current.ForceMultiplier;
-		if (force > SwipManager.Current.MaxForce) {
-			force = SwipManager.Current.MaxForce;
-		}
-		if (force < SwipManager.Current.MinForce)
-			return false;
-		this.force = force;
-		this.path = path;
-
+	public override bool MoveWithVector (LimitedForceQueue path)
+	{				
+		this.path.Clear ();
+		this.path = path.Clone ();
 		return Move ();
 
 		
 	}
 
-	void Update ()
+	void FixedUpdate ()
 	{
 		Move ();
 	}

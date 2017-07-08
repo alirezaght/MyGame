@@ -19,7 +19,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	Vector3 startSwipePosition = Vector3.zero;
 	bool isSwiping = false;
 	Character selectedCharacter = null;
-	Queue<Vector3> path = new Queue<Vector3> ();
+	LimitedForceQueue path = new LimitedForceQueue (5);
 
 	void Awake ()
 	{					
@@ -88,16 +88,16 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		}
 		if (touch.phase == TouchPhase.Moved && isSwiping) {
 			swipeTime += Time.deltaTime;
-			path.Enqueue (touch.deltaPosition);
+
 			Vector3 position = touch.position;
 			//			Vector3 distance = position - startSwipePosition;
-			Vector3 delta = new Vector3 (touch.deltaPosition.x, 0, touch.deltaPosition.y);
+			Vector3 delta = new Vector3 (touch.deltaPosition.x / Screen.width, 0, touch.deltaPosition.y / Screen.height);
 			float a = 2f * touch.deltaPosition.magnitude / (float)Math.Pow (touch.deltaTime, 2);
 			//float a = distance.magnitude / swipeTime;
-
+			path.Enqueue (new Force (touch.deltaPosition, a * ForceMultiplier));
 
 			if (this.selectedCharacter != null) {				
-				MoveWithVector (this.selectedCharacter, delta.normalized * a * 1.2f, Vector3.zero);
+				selectedCharacter.MoveWithVector (path);
 				isSwiping = false;
 			} else {
 				//Log (touch.position.ToString());
@@ -107,7 +107,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 				RaycastHit hit;
 				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
 					Character character = hit.rigidbody.gameObject.GetComponent <Character> ();
-					MoveWithVector (character, delta.normalized * a, hit.point);
+					character.MoveWithVector (path);
 					isSwiping = false;
 				} else {
 					//					Camera.main.transform.rotation = Quaternion.Euler (Camera.main.transform.eulerAngles.x, ((startSwipePosition.x - touch.position.x) * 180 / Screen.width), Camera.main.transform.eulerAngles.z);
@@ -147,10 +147,13 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 			return;
 
 		}
-		
+
+		Vector3 delta = new Vector3 (touch.deltaPosition.x / Screen.width, 0, touch.deltaPosition.y / Screen.height);
+		float a = 2f * delta.magnitude / (float)Math.Pow (touch.deltaTime, 2);
+
 		if (touch.phase == TouchPhase.Moved && isSwiping && selectedCharacter != null) {			
 			swipeTime += Time.deltaTime;
-			path.Enqueue (Camera.main.ScreenToWorldPoint (touch.deltaPosition));
+			path.Enqueue (new Force (touch.deltaPosition, a * ForceMultiplier));
 			if (trail != null) {
 				Vector3 pos = Camera.main.ScreenToWorldPoint (touch.position);
 				trail.transform.position = new Vector3 (pos.x, trail.transform.position.y, pos.z + 7);
@@ -159,12 +162,11 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		}
 		if (touch.phase == TouchPhase.Ended) {						
 			isSwiping = false;
-			if (selectedCharacter != null) {		
-				path.Enqueue (touch.deltaPosition);
+			if (selectedCharacter != null) {						
 				Vector3 position = touch.position;
-				Vector3 delta = new Vector3 (touch.deltaPosition.x, 0, touch.deltaPosition.y);
-				float a = 2f * delta.magnitude / (float)Math.Pow (touch.deltaTime, 2);
-				if (MoveWithVector (selectedCharacter, delta.normalized * a, Vector3.zero)) {
+				path.Enqueue (new Force (touch.deltaPosition, a * ForceMultiplier));
+
+				if (selectedCharacter.MoveWithVector (path)) {
 					selectedCharacter = null;
 					EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
 				}	
