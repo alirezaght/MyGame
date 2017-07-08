@@ -9,10 +9,16 @@ public class CrossingRule : Rule
 	Character movingBall = null;
 	List<Character> notMovingBalls = new List<Character> ();
 	bool BallCrossed = false;
+	int ignoreWallMask;
 
 	public CrossingRule ()
 	{				
 		EventBus.Subscribe ("PlayerMoved", OnPlayerMoved);
+	}
+
+	void Awake ()
+	{
+		ignoreWallMask = ~(1 << LayerMask.NameToLayer ("Wall"));
 	}
 
 	void Start ()
@@ -53,7 +59,7 @@ public class CrossingRule : Rule
 		endBall = this.notMovingBalls [1].transform.position;
 
 		RaycastHit hit;
-		if (Physics.Linecast (startBall, endBall, out hit)) {
+		if (Physics.Linecast (startBall, endBall, out hit, ignoreWallMask)) {
 			Character hitBall = hit.transform.GetComponent<Character> ();
 			if (hitBall == null) {
 				if (movingBall.IsMoving)
