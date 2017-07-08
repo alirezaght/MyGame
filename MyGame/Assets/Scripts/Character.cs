@@ -9,7 +9,7 @@ public abstract class Character : MonoBehaviour
 	public int id = 0;
 	public bool IsMoving = false;
 
-
+	LimitedForceQueue path = new LimitedForceQueue (10);
 	Rigidbody rigidBody;
 	LayerMask LostGroundLayer;
 
@@ -22,9 +22,8 @@ public abstract class Character : MonoBehaviour
 
 	public abstract void DoMoveAnimation ();
 
-	public abstract bool MoveWithVector (LimitedForceQueue path);
 
-	public void Awake ()
+	public virtual void Awake ()
 	{
 		rigidBody = GetComponent<Rigidbody> ();
 		LostGroundLayer = LayerMask.NameToLayer ("LostGround");
@@ -41,7 +40,7 @@ public abstract class Character : MonoBehaviour
 
 	void OnPlayerMoved (object[] info)
 	{
-		if (info [0] == this) {
+		if ((Character)info [0] == this) {
 			IsMoving = true;
 			DoMoveAnimation ();
 		}
@@ -50,7 +49,7 @@ public abstract class Character : MonoBehaviour
 
 	void OnPlayerStopped (object[] info)
 	{
-		if (info [0] == this) {
+		if ((Character)info [0] == this) {
 			DoStopAnimation ();
 //			DoDeSelectAnimation ();
 		}
@@ -58,7 +57,7 @@ public abstract class Character : MonoBehaviour
 
 	void OnPlayerSelected (object[] info)
 	{
-		if (info [0] == this)
+		if ((Character)info [0] == this)
 			DoSelectAnimation ();
 		else
 			DoDeSelectAnimation ();
@@ -66,9 +65,42 @@ public abstract class Character : MonoBehaviour
 
 	void OnPlayerDeSelected (object[] info)
 	{
-		if (info [0] == this)
+		if ((Character)info [0] == this)
 			DoDeSelectAnimation ();
 	}
+
+	public bool MoveWithVector (LimitedForceQueue path)
+	{				
+		if (path.SumOfForces < SwipManager.Current.MinForce)
+			return false;		
+		this.path.Clear ();
+		this.path = path.Clone ();
+		return Move (true);
+
+
+	}
+
+	bool Move (bool postEvent)
+	{
+		if (path.Count > 0) {
+			Force force = path.Dequeue ();
+//			Debug.Log (force.direction);
+			//Log ("f = " + force + ", d = " + direction);
+			Rigidbody rigidBody = GetRigidBody ();
+			Vector3 direction = force.NormalizeForce (path.SumOfForces);
+			rigidBody.AddRelativeForce (direction, ForceMode.Force);
+
+			if (!postEvent) {
+				EventBus.Post ("PlayerMoved", new object[]{ this });
+				EventBus.Trigger ("PlayerMoved_" + this.id);
+				EventBus.Lock ("PlayerMoved");
+				postEvent = true;
+			} 
+			return true;
+		}
+		return false;
+	}
+
 
 	void OnCollisionEnter (Collision other)
 	{
@@ -94,6 +126,14 @@ public abstract class Character : MonoBehaviour
 			}
 		}
 
+	}
+
+
+
+
+	public virtual void FixedUpdate ()
+	{
+		Move (false);
 	}
 
 

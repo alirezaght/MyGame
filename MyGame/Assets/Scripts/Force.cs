@@ -10,11 +10,7 @@ public class Force
 
 
 	public Force (Vector2 direction, float force)
-	{
-		if (force < SwipManager.Current.MinForce)
-			force = SwipManager.Current.MinForce;
-		if (force > SwipManager.Current.MaxForce)
-			force = SwipManager.Current.MaxForce;		
+	{		
 		this.direction = direction.normalized * force;
 		this.direction = new Vector3 (this.direction.x, 0, this.direction.y);
 	}
@@ -26,4 +22,6 @@ public class Force
 		else
 			return direction;
 	}
+
+
 }

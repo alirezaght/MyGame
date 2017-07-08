@@ -55,6 +55,7 @@ public class LimitedForceQueue
 	public void Clear ()
 	{
 		queue.Clear ();
+		SumOfForces = 0;
 	}
 
 

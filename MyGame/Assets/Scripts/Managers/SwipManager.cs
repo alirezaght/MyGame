@@ -19,7 +19,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	Vector3 startSwipePosition = Vector3.zero;
 	bool isSwiping = false;
 	Character selectedCharacter = null;
-	LimitedForceQueue path = new LimitedForceQueue (5);
+	LimitedForceQueue path = new LimitedForceQueue (10);
 
 	void Awake ()
 	{					
@@ -32,7 +32,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	// Use this for initialization
 	void Start ()
 	{
-		
+		Input.simulateMouseWithTouches = true;
 	}
 
 
@@ -44,25 +44,32 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		if (Input.GetKeyUp (KeyCode.Escape)) {
 			Application.Quit ();
 		}
+
 		if (PlayerManager.Current.GameEnded)
 			return;
-		if (Input.GetMouseButton (0)) {
-			Touch fakeTouch = new Touch ();
-			fakeTouch.fingerId = 10;
-			fakeTouch.position = Input.mousePosition;
-			fakeTouch.deltaTime = Time.deltaTime;
-			if (lastMousePosition == Vector3.zero)
-				lastMousePosition = Input.mousePosition;
-			fakeTouch.deltaPosition = Input.mousePosition - lastMousePosition;
-			lastMousePosition = Input.mousePosition;
-			fakeTouch.phase = (Input.GetMouseButtonDown (0) ? TouchPhase.Began : 
-				(fakeTouch.deltaPosition.sqrMagnitude > 1f ? TouchPhase.Moved : (Input.GetMouseButtonUp (0) ? TouchPhase.Ended : TouchPhase.Stationary)));
-			fakeTouch.tapCount = 1;
-
-			HandleTouch (fakeTouch);
-		}
 
 		if (Input.touchCount <= 0) {
+			Touch fake = new Touch ();
+			fake.fingerId = 10;
+			fake.position = Input.mousePosition;
+
+			fake.deltaTime = Time.deltaTime;
+			if (lastMousePosition == Vector3.zero)
+				lastMousePosition = Input.mousePosition;
+			fake.deltaPosition = Input.mousePosition - lastMousePosition;
+			lastMousePosition = Input.mousePosition;
+			if (Input.GetMouseButtonDown (0)) {
+				fake.phase = TouchPhase.Began;
+				HandleTouch (fake);
+			}
+			if (Input.GetMouseButton (0)) {
+				fake.phase = TouchPhase.Moved;
+				HandleTouch (fake);
+			}
+			if (Input.GetMouseButtonUp (0)) {				
+				fake.phase = TouchPhase.Ended;
+				HandleTouch (fake);
+			}
 			return;
 		}
 
@@ -74,7 +81,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	void HandleSwiping (Touch touch)
 	{
 		if (touch.phase == TouchPhase.Began) {
-			swipeTime = 0f;
+			swipeTime = Time.deltaTime;
 			startSwipePosition = touch.position;
 			isSwiping = true;
 			path.Clear ();
@@ -92,9 +99,11 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 			Vector3 position = touch.position;
 			//			Vector3 distance = position - startSwipePosition;
 			Vector3 delta = new Vector3 (touch.deltaPosition.x / Screen.width, 0, touch.deltaPosition.y / Screen.height);
-			float a = 2f * touch.deltaPosition.magnitude / (float)Math.Pow (touch.deltaTime, 2);
+			float a = delta.magnitude / swipeTime;
 			//float a = distance.magnitude / swipeTime;
-			path.Enqueue (new Force (touch.deltaPosition, a * ForceMultiplier));
+
+			Force force = new Force (touch.deltaPosition, a * ForceMultiplier);
+			path.Enqueue (force);			
 
 			if (this.selectedCharacter != null) {				
 				selectedCharacter.MoveWithVector (path);
@@ -131,7 +140,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		if (touch.phase == TouchPhase.Began) {
 			startSwipePosition = touch.position;
 			path.Clear ();
-			swipeTime = 0f;
+			swipeTime = Time.deltaTime;
 			isSwiping = true;
 			if (selectedCharacter != null) {
 				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
@@ -149,11 +158,15 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		}
 
 		Vector3 delta = new Vector3 (touch.deltaPosition.x / Screen.width, 0, touch.deltaPosition.y / Screen.height);
-		float a = 2f * delta.magnitude / (float)Math.Pow (touch.deltaTime, 2);
+		float a = delta.magnitude / swipeTime;
 
 		if (touch.phase == TouchPhase.Moved && isSwiping && selectedCharacter != null) {			
 			swipeTime += Time.deltaTime;
-			path.Enqueue (new Force (touch.deltaPosition, a * ForceMultiplier));
+			if (a > 0) {
+				Force force = new Force (touch.deltaPosition, a * ForceMultiplier);
+				path.Enqueue (force);
+			}
+
 			if (trail != null) {
 				Vector3 pos = Camera.main.ScreenToWorldPoint (touch.position);
 				trail.transform.position = new Vector3 (pos.x, trail.transform.position.y, pos.z + 7);
@@ -164,7 +177,10 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 			isSwiping = false;
 			if (selectedCharacter != null) {						
 				Vector3 position = touch.position;
-				path.Enqueue (new Force (touch.deltaPosition, a * ForceMultiplier));
+				if (a > 0) {
+					Force force = new Force (touch.deltaPosition, a * ForceMultiplier);
+					path.Enqueue (force);				
+				}
 
 				if (selectedCharacter.MoveWithVector (path)) {
 					selectedCharacter = null;
