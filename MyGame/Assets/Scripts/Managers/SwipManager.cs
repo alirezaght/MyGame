@@ -201,9 +201,57 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		}
 	}
 
+
+	void HandleSwipAndRelease (Touch touch)
+	{
+		if (EventBus.HasLock ("PlayerMoved"))
+			return;
+
+		if (touch.phase == TouchPhase.Began) {
+			startSwipePosition = touch.position;
+			path.Clear ();
+
+			this.selectedCharacter = null;
+			Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
+			RaycastHit hit;
+			if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
+				this.selectedCharacter = hit.rigidbody.gameObject.GetComponent <Character> ();
+				if (this.selectedCharacter != null) {
+					EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
+				}
+			}
+			return;
+		}
+
+		if (this.selectedCharacter == null)
+			return;
+
+		if (touch.phase == TouchPhase.Moved) {
+		}
+		if (touch.phase == TouchPhase.Ended) {
+			Vector2 deltaPosition = new Vector2 (startSwipePosition.x - touch.position.x , startSwipePosition.y - touch.position.y);
+			float a = deltaPosition.magnitude;
+
+			LogManager.Current.Log ((a * ForceMultiplier).ToString ());
+			if (a > 0) {
+				Force force = new Force (deltaPosition, Math.Min(MaxForce, a * ForceMultiplier));
+				path.Enqueue (force);				
+			}
+			if (selectedCharacter.MoveWithVector (path)) {
+				EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
+				//EventBus.Unlock ("PlayerMoved");
+
+				selectedCharacter = null;
+			}
+
+		}
+	}
+
+
 	void HandleTouch (Touch touch)
 	{
-		HandleSelectAndSwiping (touch);	
+		//HandleSelectAndSwiping (touch);	
+		HandleSwipAndRelease(touch);
 	}
 
 
