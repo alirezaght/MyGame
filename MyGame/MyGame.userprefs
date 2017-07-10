@@ -3,17 +3,19 @@
     <Files>
       <File FileName="Assets\Scripts\Managers\PlayerManager.cs" Line="11" Column="19" />
       <File FileName="Assets\Scripts\Rules\CrossingRule.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Managers\SwipManager.cs" Line="234" Column="19" />
-      <File FileName="Assets\Scripts\Character.cs" Line="33" Column="63" />
+      <File FileName="Assets\Scripts\Managers\SwipManager.cs" Line="221" Column="6" />
+      <File FileName="Assets\Scripts\Character.cs" Line="96" Column="29" />
       <File FileName="Assets\Scripts\BallCharacter.cs" Line="22" Column="42" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="MyGame" expanded="True">
-            <Node name="Assembly-CSharp" expanded="True" selected="True">
+            <Node name="Assembly-CSharp" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="Managers" expanded="True" />
+                <Node name="Managers" expanded="True">
+                  <Node name="SwipManager.cs" selected="True" />
+                </Node>
               </Node>
             </Node>
           </Node>
@@ -32,6 +34,10 @@
       <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/SwipManager.cs" line="107" column="59" />
       <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/SwipManager.cs" line="124" column="1" />
       <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/BallCharacter.cs" line="45" column="1" />
+      <Breakpoint file="D:\Projects\MyGame\MyGame\Assets\Scripts\Character.cs" line="44" column="1" />
+      <Breakpoint file="D:\Projects\MyGame\MyGame\Assets\Scripts\Character.cs" line="43" column="1" />
+      <Breakpoint file="D:\Projects\MyGame\MyGame\Assets\Scripts\Character.cs" line="94" column="1" />
+      <Breakpoint file="D:\Projects\MyGame\MyGame\Assets\Scripts\Character.cs" line="76" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
