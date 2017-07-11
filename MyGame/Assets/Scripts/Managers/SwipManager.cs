@@ -182,10 +182,10 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 					path.Enqueue (force);				
 				}
 
-				if (selectedCharacter.MoveWithVector (path)) {
-					selectedCharacter = null;
+				if (!selectedCharacter.MoveWithVector (path)) {					
 					EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
 				}	
+				selectedCharacter = null;
 
 			} else {				
 				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
@@ -229,20 +229,18 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		if (touch.phase == TouchPhase.Moved) {
 		}
 		if (touch.phase == TouchPhase.Ended) {
-			Vector2 deltaPosition = new Vector2 (startSwipePosition.x - touch.position.x , startSwipePosition.y - touch.position.y);
+			Vector2 deltaPosition = new Vector2 (startSwipePosition.x - touch.position.x, startSwipePosition.y - touch.position.y);
 			float a = deltaPosition.magnitude;
 
 			LogManager.Current.Log ((a * ForceMultiplier).ToString ());
 			if (a > 0) {
-				Force force = new Force (deltaPosition, Math.Min(MaxForce, a * ForceMultiplier));
+				Force force = new Force (deltaPosition, Math.Min (MaxForce, a * ForceMultiplier));
 				path.Enqueue (force);				
 			}
-			if (selectedCharacter.MoveWithVector (path)) {
+			if (!selectedCharacter.MoveWithVector (path)) {
 				EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
-				//EventBus.Unlock ("PlayerMoved");
-
-				selectedCharacter = null;
 			}
+			selectedCharacter = null;
 
 		}
 	}
@@ -251,7 +249,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	void HandleTouch (Touch touch)
 	{
 		//HandleSelectAndSwiping (touch);	
-		HandleSwipAndRelease(touch);
+		HandleSwipAndRelease (touch);
 	}
 
 

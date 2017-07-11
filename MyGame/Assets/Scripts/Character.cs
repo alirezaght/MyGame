@@ -90,11 +90,11 @@ public abstract class Character : MonoBehaviour
 			Vector3 direction = force.NormalizeForce (path.SumOfForces);
 			rigidBody.AddRelativeForce (direction, ForceMode.Force);
 
-			if (!postEvent) {
+			if (postEvent) {
 				EventBus.Post ("PlayerMoved", new object[]{ this });
 				EventBus.Trigger ("PlayerMoved_" + this.id);
 				EventBus.Lock ("PlayerMoved");
-				postEvent = true;
+				postEvent = false;
 			} 
 			return true;
 		}
