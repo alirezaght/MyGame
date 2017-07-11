@@ -1,22 +1,43 @@
-﻿<Properties StartupConfiguration="{F8672B8E-08CC-FDD0-2655-E4A0BDE13795}|" StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Rules/CrossingRule.cs">
+﻿﻿<Properties StartupConfiguration="{F8672B8E-08CC-FDD0-2655-E4A0BDE13795}|" StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Managers\SwipManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Managers/SwipManager.cs" Line="29" Column="3" />
-      <File FileName="Assets/Scripts/BallCharacter.cs" Line="40" Column="2" />
-      <File FileName="Assets/Scripts/Character.cs" Line="134" Column="17" />
-      <File FileName="Assets/Scripts/Rules/CrossingRule.cs" Line="62" Column="68" />
-      <File FileName="Assets/Scripts/Force.cs" Line="20" Column="26" />
-      <File FileName="Assets/Scripts/Managers/PlayerManager.cs" Line="23" Column="3" />
-      <File FileName="Assets/Scripts/Rules/Rule.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Managers\PlayerManager.cs" Line="11" Column="19" />
+      <File FileName="Assets\Scripts\Rules\CrossingRule.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Managers\SwipManager.cs" Line="221" Column="6" />
+      <File FileName="Assets\Scripts\Character.cs" Line="96" Column="29" />
+      <File FileName="Assets\Scripts\BallCharacter.cs" Line="22" Column="42" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="MyGame" expanded="True">
+            <Node name="Assembly-CSharp" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="Managers" expanded="True">
+                  <Node name="SwipManager.cs" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State name="__root__">
+          <Node name="MyGame" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/SwipManager.cs" line="107" column="59" />
       <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/SwipManager.cs" line="124" column="1" />
-      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/Managers/SwipManager.cs" line="76" column="1" />
-      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/Managers/SwipManager.cs" line="105" column="1" />
+      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/BallCharacter.cs" line="45" column="1" />
+      <Breakpoint file="D:\Projects\MyGame\MyGame\Assets\Scripts\Character.cs" line="44" column="1" />
+      <Breakpoint file="D:\Projects\MyGame\MyGame\Assets\Scripts\Character.cs" line="43" column="1" />
+      <Breakpoint file="D:\Projects\MyGame\MyGame\Assets\Scripts\Character.cs" line="94" column="1" />
+      <Breakpoint file="D:\Projects\MyGame\MyGame\Assets\Scripts\Character.cs" line="76" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
