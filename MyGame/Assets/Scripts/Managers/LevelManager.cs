@@ -15,6 +15,9 @@ public class LevelManager : MonoBehaviour
 		case 1:
 			SceneManager.LoadScene ("Level1");
 			break;
+		case 2:
+			SceneManager.LoadScene ("Level2");
+			break;
 		default:
 			SceneManager.LoadScene ("SelectLevelScene");
 			break;
