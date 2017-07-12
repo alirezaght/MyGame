@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Managers\LevelManager.cs">
@@ -8,6 +9,21 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
+=======
+﻿<Properties StartupConfiguration="{F8672B8E-08CC-FDD0-2655-E4A0BDE13795}|" StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/SwipManager.cs" line="107" column="59" />
+      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/SwipManager.cs" line="124" column="1" />
+      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/Managers/SwipManager.cs" line="124" column="1" />
+      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/Managers/SwipManager.cs" line="153" column="1" />
+      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/BallCharacter.cs" line="37" column="1" />
+      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/BallCharacter.cs" line="32" column="1" />
+      <Breakpoint file="/Users/alirezaghias/Documents/MyGame/MyGame/Assets/Scripts/BallCharacter.cs" line="27" column="1" />
+    </BreakpointStore>
+>>>>>>> 1c1e66a2c500f07feb71b8e613d369aebb7c0dcd
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

@@ -248,7 +248,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 
 	void HandleTouch (Touch touch)
 	{
-		//HandleSelectAndSwiping (touch);	
+//		HandleSelectAndSwiping (touch);	
 		HandleSwipAndRelease (touch);
 	}
 

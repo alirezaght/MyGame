@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.AI;
 
 [RequireComponent (typeof(Rigidbody))]
 public abstract class Character : MonoBehaviour
@@ -12,7 +13,8 @@ public abstract class Character : MonoBehaviour
 	LimitedForceQueue path = new LimitedForceQueue (10);
 	Rigidbody rigidBody;
 	LayerMask LostGroundLayer;
-
+	LayerMask WallLayer;
+	LayerMask PlayerLayer;
 
 	public abstract void DoSelectAnimation ();
 
@@ -27,6 +29,8 @@ public abstract class Character : MonoBehaviour
 	{
 		rigidBody = GetComponent<Rigidbody> ();
 		LostGroundLayer = LayerMask.NameToLayer ("LostGround");
+		WallLayer = LayerMask.NameToLayer ("Wall");
+		PlayerLayer = LayerMask.NameToLayer ("Player");
 		EventBus.Subscribe ("PlayerMoved", OnPlayerMoved);
 		EventBus.Subscribe ("PlayerStopped", OnPlayerStopped);
 		EventBus.Subscribe ("PlayerSelected", OnPlayerSelected);
@@ -106,6 +110,10 @@ public abstract class Character : MonoBehaviour
 	{
 		if (other.gameObject.layer == LostGroundLayer) {
 			EventBus.Post ("LostGround", new object[]{ this, other });
+		} else if (other.gameObject.layer == WallLayer) {
+			EventBus.Post ("HitWall", new object[] { this, other });
+		} else if (other.gameObject.layer == PlayerLayer) {
+			EventBus.Post ("HitPlayer", new object[] { this, other });
 		}
 	}
 
