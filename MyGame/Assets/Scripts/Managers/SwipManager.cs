@@ -13,6 +13,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	public float MaxForce;
 	public float MinForce;
 	public TrailRenderer trail;
+	public bool DragAndRelease = false;
 
 	int ignoreWallMask;
 	float swipeTime = 0;
@@ -27,7 +28,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		Physics.gravity = new Vector3 (0, -200, 0);
 
 		ignoreWallMask = ~(1 << LayerMask.NameToLayer ("Wall"));
-
+		EventBus.Subscribe ("PlayerStopped", OnPlayerStopped);
 	}
 	// Use this for initialization
 	void Start ()
@@ -35,9 +36,26 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 		Input.simulateMouseWithTouches = true;
 	}
 
-
+	public void ToggleHandleType ()
+	{
+		DragAndRelease = !DragAndRelease;
+	}
 	// Update is called once per frame
 	Vector3 lastMousePosition = Vector3.zero;
+
+	void OnPlayerStopped (object[] info)
+	{
+		Character character = (Character)info [0];
+		var id = (character.id + 1) % 3;
+		foreach (Character c in PlayerManager.Current.GetPlayers ()) {
+			if (id == c.id) {
+				selectedCharacter = c;
+				EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
+				break;
+			}
+		}
+			
+	}
 
 	void Update ()
 	{		
@@ -211,36 +229,48 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 			startSwipePosition = touch.position;
 			path.Clear ();
 
-			this.selectedCharacter = null;
-			Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
-			RaycastHit hit;
-			if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {
-				this.selectedCharacter = hit.rigidbody.gameObject.GetComponent <Character> ();
-				if (this.selectedCharacter != null) {
-					EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
+			if (selectedCharacter != null) {
+				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
+				RaycastHit hit;
+				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {							
+					Character character = hit.rigidbody.gameObject.GetComponent<Character> ();
+					if (character != selectedCharacter) {
+						selectedCharacter = null;
+						EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
+					}
 				}
 			}
+
 			return;
 		}
 
-		if (this.selectedCharacter == null)
-			return;
+
 
 		if (touch.phase == TouchPhase.Moved) {
 		}
 		if (touch.phase == TouchPhase.Ended) {
-			Vector2 deltaPosition = new Vector2 (startSwipePosition.x - touch.position.x, startSwipePosition.y - touch.position.y);
-			float a = deltaPosition.magnitude;
+			if (selectedCharacter != null) {
+				Vector2 deltaPosition = new Vector2 (startSwipePosition.x - touch.position.x, startSwipePosition.y - touch.position.y);
+				float a = deltaPosition.magnitude;
 
-			LogManager.Current.Log ((a * ForceMultiplier).ToString ());
-			if (a > 0) {
-				Force force = new Force (deltaPosition, Math.Min (MaxForce, a * ForceMultiplier));
-				path.Enqueue (force);				
+				LogManager.Current.Log ((a * ForceMultiplier).ToString ());
+				if (a > 0) {
+					Force force = new Force (deltaPosition, Math.Min (MaxForce, a * ForceMultiplier));
+					path.Enqueue (force);				
+				}
+				if (!selectedCharacter.MoveWithVector (path)) {
+					EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
+				}
+				selectedCharacter = null;
+			} else {
+				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
+				RaycastHit hit;
+				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {							
+					selectedCharacter = hit.rigidbody.gameObject.GetComponent<Character> ();
+					EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
+					EventBus.Unlock ("PlayerMoved");
+				}
 			}
-			if (!selectedCharacter.MoveWithVector (path)) {
-				EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
-			}
-			selectedCharacter = null;
 
 		}
 	}
@@ -248,8 +278,13 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 
 	void HandleTouch (Touch touch)
 	{
-//		HandleSelectAndSwiping (touch);	
-		HandleSwipAndRelease (touch);
+		if (DragAndRelease) {
+			HandleSwipAndRelease (touch);
+		} else {
+			HandleSelectAndSwiping (touch);	
+		}
+
+
 	}
 
 

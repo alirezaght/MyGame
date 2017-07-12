@@ -28,6 +28,7 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 		foreach (Rule rule in FindObjectsOfType(typeof(Rule))) {
 			rules.Add (rule);
 		}
+
 	}
 
 
@@ -51,7 +52,8 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 		LogManager.Current.Log ("You Lost ");
 	}
 
-	public void TryAgain() {
+	public void TryAgain ()
+	{
 		GameEnded = false;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 	}
