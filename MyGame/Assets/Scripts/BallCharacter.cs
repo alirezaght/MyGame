@@ -8,9 +8,10 @@ using System;
 public class BallCharacter : Character
 {
 
-	public AudioSource HitAudio;
-	public AudioSource BounceAudio;
+	public AudioClip HitAudio;
+	public AudioClip BounceAudio;
 
+	AudioSource audioSource;
 	new Renderer renderer;
 
 
@@ -18,6 +19,7 @@ public class BallCharacter : Character
 	{
 		base.Awake ();
 		renderer = GetComponent<Renderer> ();
+		audioSource = GetComponent<AudioSource> ();
 		EventBus.Subscribe ("HitWall", OnHitWall);
 		EventBus.Subscribe ("HitPlayer", OnHitPlayer);
 	}
@@ -38,12 +40,12 @@ public class BallCharacter : Character
 
 	void PlayBounce ()
 	{
-		BounceAudio.Play ();
+		audioSource.PlayOneShot (BounceAudio);
 	}
 
 	void PlayHit ()
 	{
-		HitAudio.Play ();
+		audioSource.PlayOneShot (HitAudio);
 	}
 
 	public override void DoSelectAnimation ()
