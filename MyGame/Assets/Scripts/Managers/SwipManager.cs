@@ -39,6 +39,11 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	public void ToggleHandleType ()
 	{
 		DragAndRelease = !DragAndRelease;
+		if (DragAndRelease) {
+			ForceMultiplier = 20;
+		} else {
+			ForceMultiplier = 1200;
+		}
 	}
 	// Update is called once per frame
 	Vector3 lastMousePosition = Vector3.zero;
@@ -160,17 +165,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 			path.Clear ();
 			swipeTime = Time.deltaTime;
 			isSwiping = true;
-			if (selectedCharacter != null) {
-				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
-				RaycastHit hit;
-				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {							
-					Character character = hit.rigidbody.gameObject.GetComponent<Character> ();
-					if (character != selectedCharacter) {
-						selectedCharacter = null;
-						EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
-					}
-				}
-			}
+
 			return;
 
 		}
@@ -201,19 +196,19 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 				}
 
 				if (!selectedCharacter.MoveWithVector (path)) {					
-					EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
+					//EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
 				}	
-				selectedCharacter = null;
 
-			} else {				
+			} 				
 				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
 				RaycastHit hit;
-				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {							
+				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {	
+				EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
 					selectedCharacter = hit.rigidbody.gameObject.GetComponent<Character> ();
 					EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
 					EventBus.Unlock ("PlayerMoved");
 				}
-			}
+
 
 			return;
 		}
@@ -229,17 +224,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 			startSwipePosition = touch.position;
 			path.Clear ();
 
-			if (selectedCharacter != null) {
-				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
-				RaycastHit hit;
-				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {							
-					Character character = hit.rigidbody.gameObject.GetComponent<Character> ();
-					if (character != selectedCharacter) {
-						selectedCharacter = null;
-						EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
-					}
-				}
-			}
+
 
 			return;
 		}
@@ -259,18 +244,19 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 					path.Enqueue (force);				
 				}
 				if (!selectedCharacter.MoveWithVector (path)) {
-					EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
+					//EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
 				}
-				selectedCharacter = null;
-			} else {
+
+			} 
 				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
 				RaycastHit hit;
-				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {							
+				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {	
+					EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
 					selectedCharacter = hit.rigidbody.gameObject.GetComponent<Character> ();
 					EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
 					EventBus.Unlock ("PlayerMoved");
 				}
-			}
+
 
 		}
 	}
