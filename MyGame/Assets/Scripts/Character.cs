@@ -79,6 +79,7 @@ public abstract class Character : MonoBehaviour
 			return false;		
 		this.path.Clear ();
 		this.path = path.Clone ();
+		path.Clear ();
 		return Move (true);
 
 
@@ -92,7 +93,7 @@ public abstract class Character : MonoBehaviour
 			//Log ("f = " + force + ", d = " + direction);
 			Rigidbody rigidBody = GetRigidBody ();
 			Vector3 direction = force.NormalizeForce (path.SumOfForces);
-			rigidBody.AddRelativeForce (direction, ForceMode.Force);
+			rigidBody.AddForce (direction);
 
 			if (postEvent) {
 				EventBus.Post ("PlayerMoved", new object[]{ this });

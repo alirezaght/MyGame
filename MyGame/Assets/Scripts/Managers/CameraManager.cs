@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CameraManager : SingletonBehaviour<CameraManager> {
+public class CameraManager : SingletonBehaviour<CameraManager>
+{
 
 	public float CenterThreshold;
 	public float FieldViewThreshold;
@@ -13,23 +14,26 @@ public class CameraManager : SingletonBehaviour<CameraManager> {
 	public float MaxFieldView;
 
 
-	List<Character> players = new List<Character>();
+	List<Character> players = new List<Character> ();
 
 
-	void Start() {
+	void Start ()
+	{
 		players = PlayerManager.Current.GetPlayers ();
 	}
 
-	Vector3 CenterOfPlayers() {		
+	Vector3 CenterOfPlayers ()
+	{		
 		Vector3 average = Vector3.zero;
-		foreach (Character player in players) {
-			average += player.gameObject.transform.position / 2;
+		for (int i = 0; i < players.Count; i++) {
+			average += players [i].gameObject.transform.position;
 		}
-		return average;
+		return average / players.Count;
 	}
 
 
-	float MaxDistanceOfPlayers() {		
+	float MaxDistanceOfPlayers ()
+	{		
 		float max = 0;
 		for (int i = 0; i < players.Count; i++) {
 			for (int j = i; j < players.Count; j++) {
@@ -41,12 +45,13 @@ public class CameraManager : SingletonBehaviour<CameraManager> {
 		
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		var center = CenterOfPlayers ();
 		var maxDistance = MaxDistanceOfPlayers ();
 		var cameraPos = new Vector3 (Camera.main.transform.position.x, 0, Camera.main.transform.position.z);
 		if ((cameraPos - center).magnitude > CenterThreshold)
-			MoveCamera(center);
+			MoveCamera (center);
 
 		if (Camera.main.orthographicSize < FieldViewFactor * maxDistance - FieldViewThreshold) {			
 			ZoomCamera (maxDistance);
@@ -55,12 +60,16 @@ public class CameraManager : SingletonBehaviour<CameraManager> {
 		}
 
 	}
-	void ZoomCamera(float maxDistance) {
-		var newValue = Mathf.Clamp(FieldViewFactor * maxDistance, MinFieldView, MaxFieldView);
+
+	void ZoomCamera (float maxDistance)
+	{
+		var newValue = Mathf.Clamp (FieldViewFactor * maxDistance, MinFieldView, MaxFieldView);
 		Camera.main.orthographicSize = Mathf.Lerp (Camera.main.orthographicSize, newValue, 1 * Time.deltaTime);			
 	}
-	void MoveCamera(Vector3 position) {
-		var pos = new Vector3 (position.x, Camera.main.transform.position.y, position.z - 12);
+
+	void MoveCamera (Vector3 position)
+	{
+		var pos = new Vector3 (position.x, Camera.main.transform.position.y, position.z);
 		Camera.main.transform.position = Vector3.Lerp (Camera.main.transform.position, pos, 1f * Time.deltaTime);
 	}
 }

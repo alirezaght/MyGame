@@ -9,7 +9,7 @@ using UnityEngine.AI;
 
 public class SwipManager : SingletonBehaviour<SwipManager>
 {
-	public float ForceMultiplier;
+	float ForceMultiplier;
 	public float MaxForce;
 	public float MinForce;
 	public TrailRenderer trail;
@@ -29,6 +29,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 
 		ignoreWallMask = ~(1 << LayerMask.NameToLayer ("Wall"));
 		EventBus.Subscribe ("PlayerStopped", OnPlayerStopped);
+		ForceMultiplier = 1200;
 	}
 	// Use this for initialization
 	void Start ()
@@ -200,14 +201,14 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 				}	
 
 			} 				
-				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
-				RaycastHit hit;
-				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {	
+			Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
+			RaycastHit hit;
+			if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {	
 				EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
-					selectedCharacter = hit.rigidbody.gameObject.GetComponent<Character> ();
-					EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
-					EventBus.Unlock ("PlayerMoved");
-				}
+				selectedCharacter = hit.rigidbody.gameObject.GetComponent<Character> ();
+				EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
+				EventBus.Unlock ("PlayerMoved");
+			}
 
 
 			return;
@@ -248,14 +249,14 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 				}
 
 			} 
-				Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
-				RaycastHit hit;
-				if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {	
-					EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
-					selectedCharacter = hit.rigidbody.gameObject.GetComponent<Character> ();
-					EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
-					EventBus.Unlock ("PlayerMoved");
-				}
+			Ray ray = Camera.main.ScreenPointToRay (startSwipePosition);
+			RaycastHit hit;
+			if (Physics.SphereCast (ray, touch.radius, out hit, float.PositiveInfinity, ignoreWallMask)) {	
+				EventBus.Post ("PlayerDeSelected", new object[]{ selectedCharacter });
+				selectedCharacter = hit.rigidbody.gameObject.GetComponent<Character> ();
+				EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
+				EventBus.Unlock ("PlayerMoved");
+			}
 
 
 		}
