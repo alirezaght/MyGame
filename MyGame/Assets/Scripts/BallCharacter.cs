@@ -11,9 +11,12 @@ public class BallCharacter : Character
 	public AudioClip HitAudio;
 	public AudioClip BounceAudio;
 
+
+	Light GlowLight;
+
 	AudioSource audioSource;
 	new Renderer renderer;
-
+	bool rangeIncrease = true;
 
 	public override void Awake ()
 	{
@@ -22,6 +25,7 @@ public class BallCharacter : Character
 		audioSource = GetComponent<AudioSource> ();
 		EventBus.Subscribe ("HitWall", OnHitWall);
 		EventBus.Subscribe ("HitPlayer", OnHitPlayer);
+		GlowLight = GetComponentInChildren<Light> ();
 	}
 
 	void OnHitWall (object[] info)
@@ -50,26 +54,53 @@ public class BallCharacter : Character
 
 	public override void DoSelectAnimation ()
 	{
-		this.renderer.material.color = Color.blue;
+		if (GlowLight != null) {
+			GlowLight.intensity = 20;
+			GlowLight.color = Color.red;
+		}
 	}
 
 	public override void DoDeSelectAnimation ()
 	{
-		this.renderer.material.color = Color.red;
+		if (GlowLight != null) {
+			GlowLight.intensity = 5;
+			GlowLight.color = Color.yellow;
+		}
 	}
 
 	public override void DoStopAnimation ()
 	{
-		this.renderer.material.color = Color.red;
+		if (GlowLight != null) {
+			GlowLight.intensity = 7;
+			GlowLight.color = Color.yellow;
+		}
 	}
 
 	public override void DoMoveAnimation ()
 	{
-		this.renderer.material.color = Color.green;
+		if (GlowLight != null) {
+			GlowLight.intensity = 10;
+			GlowLight.color = Color.green;
+		}
 		PlayHit ();
 	}
 
+	void Update ()
+	{
+		if (GlowLight != null) {
+			if (rangeIncrease)
+				GlowLight.range += UnityEngine.Random.Range (0.5f, 1f) * Time.deltaTime * 10;
+			else
+				GlowLight.range -= UnityEngine.Random.Range (0.01f, 0.5f) * Time.deltaTime * 7;
+			if (GlowLight.range >= 7) {
+				rangeIncrease = false;
+			}
+			if (GlowLight.range <= 3) {
+				rangeIncrease = true;
+			}
 
+		}
+	}
 
 
 }
