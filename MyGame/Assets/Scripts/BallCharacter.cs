@@ -15,13 +15,13 @@ public class BallCharacter : Character
 	Light GlowLight;
 
 	AudioSource audioSource;
-	new Renderer renderer;
+	new MeshRenderer renderer;
 	bool rangeIncrease = true;
 
 	public override void Awake ()
 	{
 		base.Awake ();
-		renderer = GetComponent<Renderer> ();
+		renderer = GetComponent<MeshRenderer> ();
 		audioSource = GetComponent<AudioSource> ();
 		EventBus.Subscribe ("HitWall", OnHitWall);
 		EventBus.Subscribe ("HitPlayer", OnHitPlayer);
@@ -56,7 +56,7 @@ public class BallCharacter : Character
 	{
 		if (GlowLight != null) {
 			GlowLight.intensity = 20;
-			GlowLight.color = Color.red;
+			renderer.material.SetColor ("_EmissionColor", Color.red);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class BallCharacter : Character
 	{
 		if (GlowLight != null) {
 			GlowLight.intensity = 5;
-			GlowLight.color = Color.yellow;
+			renderer.material.SetColor ("_EmissionColor", Color.blue);
 		}
 	}
 
@@ -72,7 +72,7 @@ public class BallCharacter : Character
 	{
 		if (GlowLight != null) {
 			GlowLight.intensity = 7;
-			GlowLight.color = Color.yellow;
+			renderer.material.SetColor ("_EmissionColor", Color.blue);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class BallCharacter : Character
 	{
 		if (GlowLight != null) {
 			GlowLight.intensity = 10;
-			GlowLight.color = Color.green;
+			renderer.material.SetColor ("_EmissionColor", Color.green);
 		}
 		PlayHit ();
 	}

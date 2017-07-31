@@ -60,7 +60,6 @@
      <Compile Include="Assets\Scripts\Rules\Rule.cs" />
      <Compile Include="Assets\Scripts\Utils\EventBus.cs" />
      <Compile Include="Assets\Scripts\Utils\SingletonBehaviour.cs" />
-     <None Include="Assets\Material\Neon.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

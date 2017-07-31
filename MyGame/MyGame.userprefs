@@ -1,9 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Character.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/BallCharacter.cs">
     <Files>
-      <File FileName="Assets/Scripts/Managers/SwipManager.cs" Line="216" Column="1" />
-      <File FileName="Assets/Scripts/Character.cs" Line="82" Column="17" />
+      <File FileName="Assets/Scripts/BallCharacter.cs" Line="82" Column="29" />
+      <File FileName="Assets/Scripts/Managers/SwipManager.cs" Line="202" Column="5" />
+      <File FileName="Assets/Scripts/Character.cs" Line="121" Column="17" />
+      <File FileName="Assets/Material/Neon.shader" Line="55" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
