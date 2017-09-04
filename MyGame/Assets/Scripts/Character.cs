@@ -15,6 +15,7 @@ public abstract class Character : MonoBehaviour
 	LayerMask LostGroundLayer;
 	LayerMask WallLayer;
 	LayerMask PlayerLayer;
+	LayerMask GateLayer;
 
 	public abstract void DoSelectAnimation ();
 
@@ -31,6 +32,8 @@ public abstract class Character : MonoBehaviour
 		LostGroundLayer = LayerMask.NameToLayer ("LostGround");
 		WallLayer = LayerMask.NameToLayer ("Wall");
 		PlayerLayer = LayerMask.NameToLayer ("Player");
+		GateLayer = LayerMask.NameToLayer ("Gate");
+
 		EventBus.Subscribe ("PlayerMoved", OnPlayerMoved);
 		EventBus.Subscribe ("PlayerStopped", OnPlayerStopped);
 		EventBus.Subscribe ("PlayerSelected", OnPlayerSelected);
@@ -118,6 +121,11 @@ public abstract class Character : MonoBehaviour
 		}
 	}
 
+	void OnTriggerEnter(Collider go){
+		if (go.gameObject.layer == GateLayer) {
+			EventBus.Post ("GateEntered", new object[]{ go });
+		}
+	}
 	void LateUpdate ()
 	{	
 		if (IsMoving) {	
