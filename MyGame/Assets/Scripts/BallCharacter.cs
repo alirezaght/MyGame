@@ -13,33 +13,31 @@ public class BallCharacter : Character
 
 
 
-	ParticleSystem particleSystem;
+
 	AudioSource audioSource;
-	new MeshRenderer renderer;
+	new MeshRenderer meshRenderer;
 	bool rangeIncrease = true;
-	ParticleSystem.MinMaxGradient startColor;
 
 	public override void Awake ()
 	{
 		base.Awake ();
-		renderer = GetComponent<MeshRenderer> ();
+		meshRenderer = GetComponent<MeshRenderer> ();
 		audioSource = GetComponent<AudioSource> ();
 		EventBus.Subscribe ("HitWall", OnHitWall);
 		EventBus.Subscribe ("HitPlayer", OnHitPlayer);
-		particleSystem = GetComponentInChildren<ParticleSystem> ();
-		startColor = particleSystem.colorOverLifetime.color;
+
 	}
 
 	void OnHitWall (object[] info)
 	{
-		if (info [0] == this) {
+		if ((BallCharacter)info [0] == this) {
 			PlayBounce ();
 		}
 	}
 
 	void OnHitPlayer (object[] info)
 	{
-		if (info [0] == this) {
+		if ((BallCharacter)info [0] == this) {
 			PlayHit ();
 		}
 	}
@@ -56,11 +54,7 @@ public class BallCharacter : Character
 
 	public override void DoSelectAnimation ()
 	{
-		if (particleSystem != null) {			
-			var overtime = particleSystem.colorOverLifetime;
-			overtime.color = new ParticleSystem.MinMaxGradient (Color.red);
-
-		}
+		meshRenderer.material.SetColor ("_EmissionColor", Color.black);
 	}
 
 	public override void DoDeSelectAnimation ()
@@ -70,19 +64,12 @@ public class BallCharacter : Character
 
 	public override void DoStopAnimation ()
 	{
-		if (particleSystem != null) {	
-			var overtime = particleSystem.colorOverLifetime;
-			overtime.color = startColor;
-
-		}
+		meshRenderer.material.SetColor ("_EmissionColor", Color.red);
 	}
 
 	public override void DoMoveAnimation ()
 	{
-		if (particleSystem != null) {
-			var overtime = particleSystem.colorOverLifetime;
-			overtime.color = new ParticleSystem.MinMaxGradient (Color.green);
-		}
+		meshRenderer.material.SetColor ("_EmissionColor", Color.green);
 		PlayHit ();
 	}
 

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VR.WSA;
 
 public class LimitedForceQueue
 {
@@ -39,8 +38,6 @@ public class LimitedForceQueue
 	public Force Dequeue ()
 	{
 		Force tmp = queue.Dequeue ();
-		if (tmp != null)
-			SumOfForces -= tmp.direction.magnitude;
 		return tmp;
 	}
 

@@ -11,6 +11,7 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 	public bool GameEnded = false;
 
 	List<Character> playerCharacters = new List<Character> ();
+	List<Gate> gates = new List<Gate> ();
 	List<Rule> rules = new List<Rule> ();
 
 
@@ -19,14 +20,21 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 		return playerCharacters;
 	}
 
-	void Awake ()
+	public List<Gate> GetGates ()
 	{
-		var objects = FindObjectsOfType (typeof(Character));
-		foreach (Character obj in objects) {						
+		return gates;
+	}
+
+	void Awake ()
+	{		
+		foreach (Character obj in FindObjectsOfType (typeof(Character))) {						
 			playerCharacters.Add (obj);
 		}
 		foreach (Rule rule in FindObjectsOfType(typeof(Rule))) {
 			rules.Add (rule);
+		}
+		foreach (Gate obj in FindObjectsOfType (typeof(Gate))) {						
+			gates.Add (obj);
 		}
 
 	}
@@ -35,21 +43,37 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 
 	void Update ()
 	{
+		if (GameEnded)
+			return;
+		
 		foreach (Rule rule in rules) {
 			if (rule.isActiveAndEnabled)
-			if (!rule.IsValid ())
-			if (rule.ShouldLoseIfNotValid)
-				Lost ();
-		}
+			if (!rule.IsValid ()) {
+				if (rule.ShouldLoseIfNotValid)
+					Lost (rule);
+			} else {
+				if (rule.DidWinTheGame)
+					Win (rule);
+			}
 
+		}
 
 	}
 
-	void Lost ()
+	void Lost (Rule rule)
 	{
 //		GameEnded = true;
 //		LostAnimator.SetTrigger("Lost");
-		LogManager.Current.Log ("You Lost ");
+
+		LogManager.Current.Log ("You Lost By rule = " + rule.ToString ());
+	}
+
+	void Win (Rule rule)
+	{
+		//		GameEnded = true;
+		//		LostAnimator.SetTrigger("Lost");
+
+		LogManager.Current.Log ("You Won ");
 	}
 
 	public void TryAgain ()

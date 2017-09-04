@@ -94,7 +94,7 @@ public abstract class Character : MonoBehaviour
 			Rigidbody rigidBody = GetRigidBody ();
 			Vector3 direction = force.NormalizeForce (path.SumOfForces);
 			rigidBody.AddForce (direction);
-
+			LogManager.Current.Log ("now=" + direction.magnitude.ToString () + ", sum = " + path.SumOfForces.ToString () + ", f=" + force.direction.magnitude.ToString ());
 			if (postEvent) {
 				EventBus.Post ("PlayerMoved", new object[]{ this });
 				EventBus.Trigger ("PlayerMoved_" + this.id);
@@ -117,6 +117,7 @@ public abstract class Character : MonoBehaviour
 			EventBus.Post ("HitPlayer", new object[] { this, other });
 		}
 	}
+
 
 	void LateUpdate ()
 	{	

@@ -12,8 +12,11 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	float ForceMultiplier;
 	public float MaxForce;
 	public float MinForce;
+	public float ForceMultiplierForDrag = 20;
+	public float ForceMultiplierForSwipe = 1200;
 	public TrailRenderer trail;
 	public bool DragAndRelease = false;
+	public BallCharacter FirstSelectedBall;
 
 	int ignoreWallMask;
 	float swipeTime = 0;
@@ -25,7 +28,7 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	void Awake ()
 	{					
 //		LeanTouch.OnFingerSwipe += OnFingerSwipe;
-		Physics.gravity = new Vector3 (0, -200, 0);
+//		Physics.gravity = new Vector3 (0, -200, 0);
 
 		ignoreWallMask = ~(1 << LayerMask.NameToLayer ("Wall"));
 		EventBus.Subscribe ("PlayerStopped", OnPlayerStopped);
@@ -35,15 +38,17 @@ public class SwipManager : SingletonBehaviour<SwipManager>
 	void Start ()
 	{
 		Input.simulateMouseWithTouches = true;
+		selectedCharacter = FirstSelectedBall;
+		EventBus.Post ("PlayerSelected", new object[]{ selectedCharacter });
 	}
 
 	public void ToggleHandleType ()
 	{
 		DragAndRelease = !DragAndRelease;
 		if (DragAndRelease) {
-			ForceMultiplier = 20;
+			ForceMultiplier = ForceMultiplierForDrag;
 		} else {
-			ForceMultiplier = 1200;
+			ForceMultiplier = ForceMultiplierForSwipe;
 		}
 	}
 	// Update is called once per frame

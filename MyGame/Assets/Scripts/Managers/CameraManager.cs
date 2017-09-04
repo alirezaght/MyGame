@@ -68,8 +68,16 @@ public class CameraManager : SingletonBehaviour<CameraManager>
 	}
 
 	void MoveCamera (Vector3 position)
-	{
-		var pos = new Vector3 (position.x, Camera.main.transform.position.y, position.z);
+	{		
+		var alpha = Camera.main.transform.rotation.eulerAngles.x * Mathf.PI / 180;
+		var sin = Mathf.Sin (alpha);
+		var cos = Mathf.Cos (alpha);
+		var offset = 0f;
+		if (sin != 0) {
+			var cot = cos / sin;
+			offset = cot * Camera.main.transform.position.y;
+		}			
+		var pos = new Vector3 (position.x, Camera.main.transform.position.y, position.z - offset);
 		Camera.main.transform.position = Vector3.Lerp (Camera.main.transform.position, pos, 1f * Time.deltaTime);
 	}
 }

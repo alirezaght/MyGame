@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Diagnostics;
 
 public class Force
 {
@@ -10,7 +9,7 @@ public class Force
 
 
 	public Force (Vector2 direction, float force)
-	{		
+	{				
 		this.direction = direction.normalized * force;
 		this.direction = new Vector3 (this.direction.x, 0, this.direction.y);
 	}

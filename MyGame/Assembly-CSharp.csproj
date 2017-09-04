@@ -49,13 +49,16 @@
      <Compile Include="Assets\Scripts\BallCharacter.cs" />
      <Compile Include="Assets\Scripts\Character.cs" />
      <Compile Include="Assets\Scripts\Force.cs" />
+     <Compile Include="Assets\Scripts\Gate.cs" />
      <Compile Include="Assets\Scripts\LimitedQueue.cs" />
      <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
      <Compile Include="Assets\Scripts\Managers\LevelManager.cs" />
      <Compile Include="Assets\Scripts\Managers\LogManager.cs" />
      <Compile Include="Assets\Scripts\Managers\PlayerManager.cs" />
      <Compile Include="Assets\Scripts\Managers\SwipManager.cs" />
+     <Compile Include="Assets\Scripts\NPC.cs" />
      <Compile Include="Assets\Scripts\Rules\CrossingRule.cs" />
+     <Compile Include="Assets\Scripts\Rules\GateRule.cs" />
      <Compile Include="Assets\Scripts\Rules\LostGroundRule.cs" />
      <Compile Include="Assets\Scripts\Rules\Rule.cs" />
      <Compile Include="Assets\Scripts\Utils\EventBus.cs" />
