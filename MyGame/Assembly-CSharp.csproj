@@ -59,7 +59,6 @@
      <Compile Include="Assets\Scripts\Managers\SwipManager.cs" />
      <Compile Include="Assets\Scripts\NPC.cs" />
      <Compile Include="Assets\Scripts\Rules\CrossingRule.cs" />
-     <Compile Include="Assets\Scripts\Rules\GatePassingRule.cs" />
      <Compile Include="Assets\Scripts\Rules\GateRule.cs" />
      <Compile Include="Assets\Scripts\Rules\LostGroundRule.cs" />
      <Compile Include="Assets\Scripts\Rules\Rule.cs" />
