@@ -8,16 +8,17 @@ public class LevelManager : MonoBehaviour
 
 	public void GoToLevel (int levelNo)
 	{
-		string sceneName = levelNo == 0 ? "SelectLevelScene" : "Level" + levelNo.ToString();
+		string sceneName = levelNo == 0 ? "SelectLevelScene" : "Level" + levelNo.ToString ();
 		Scene scene = SceneManager.GetSceneByName (sceneName);
-		if (scene.IsValid()) {
+		if (scene.IsValid ()) {
 			SceneManager.LoadScene (sceneName);
 		} else {
 			Debug.Log ("Coming soon ...");	
 		}
 	}
 
-	public void GoToMain(){
+	public void GoToMain ()
+	{
 		SceneManager.LoadScene ("MainScene");
 	}
 }
