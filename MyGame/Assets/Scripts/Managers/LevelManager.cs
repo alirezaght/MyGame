@@ -5,9 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-
+	public void Start(){
+		//Canvas.ForceUpdateCanvases ();
+	}
 	public void GoToLevel (int levelNo)
 	{
+		//Load by scene name
+		/*
 		string sceneName = levelNo == 0 ? "SelectLevelScene" : "Level" + levelNo.ToString();
 		Scene scene = SceneManager.GetSceneByName (sceneName);
 		if (scene.IsValid()) {
@@ -15,6 +19,13 @@ public class LevelManager : MonoBehaviour
 		} else {
 			Debug.Log ("Coming soon ...");	
 		}
+		*/
+
+		//MainScene = 0
+		//LevelScene = 1
+		//Level1 = 2 
+		//,...
+		SceneManager.LoadScene (levelNo + 1);
 	}
 
 	public void GoToMain(){
