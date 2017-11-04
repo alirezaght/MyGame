@@ -12,12 +12,18 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 
 	List<Character> playerCharacters = new List<Character> ();
 	List<Gate> gates = new List<Gate> ();
+	List<Coin> coins = new List<Coin> ();
 	List<Rule> rules = new List<Rule> ();
 
 
 	public List<Character> GetPlayers ()
 	{
 		return playerCharacters;
+	}
+
+	public List<Coin> GetCoins ()
+	{
+		return coins;
 	}
 
 	public List<Gate> GetGates ()
@@ -35,6 +41,10 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 		}
 		foreach (Gate obj in FindObjectsOfType (typeof(Gate))) {						
 			gates.Add (obj);
+		}
+
+		foreach (Coin obj in FindObjectsOfType (typeof(Coin))) {						
+			coins.Add (obj);
 		}
 
 	}
@@ -80,6 +90,17 @@ public class PlayerManager : SingletonBehaviour<PlayerManager>
 	{
 		GameEnded = false;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+	}
+
+	public double GetCoinPassed ()
+	{
+		double amount = 0;
+		foreach (Coin coin in coins) {
+			if (coin.GotThrough) {
+				amount += coin.GiftAmount;
+			}
+		}
+		return amount;
 	}
 
 
